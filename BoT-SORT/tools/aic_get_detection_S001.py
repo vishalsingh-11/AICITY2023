@@ -9,6 +9,7 @@ import numpy as np
 
 from loguru import logger
 
+
 sys.path.append('.')
 
 from yolox.data.data_augment import preproc

@@ -219,6 +219,8 @@ def main():
         scenes = os.listdir(scene_path)
     
     scenes.sort()
+
+    scenes = ['S001']
         
     for scene in scenes:
 
@@ -238,10 +240,11 @@ def main():
             feature4 = np.load(os.path.join(data_path,'test_emb','S001_osnet_x1_0_market.npy'),allow_pickle=True)
             feature5 = np.load(os.path.join(data_path,'test_emb','S001_osnet_x1_0_msmt17.npy'),allow_pickle=True)
             embedding = np.array([None]*len(feature1))
-            
             for i in range(len(feature1)):
                 embedding[i] = np.concatenate((feature1[i],feature2[i],feature3[i],feature4[i],feature5[i]),axis=0)
-        
+            # embedding = np.array([None]*len(feature3))
+            # for i in range(len(feature3)):
+            #     embedding[i] = feature3[i]
         else:
             args.nms_thres = 0.7
             embedding = np.load(os.path.join(data_path,'{}_emb'.format(dataset),scene+'.npy'), allow_pickle=True)

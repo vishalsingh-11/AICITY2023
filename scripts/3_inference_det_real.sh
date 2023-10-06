@@ -1,6 +1,6 @@
-conda activate botsort_env
+# conda activate botsort_env
 cd BoT-SORT
 
-python3 tools/aic_get_detection_S001.py -f yolox/exps/example/mot/yolox_x_mix_det.py -c bytetrack_x_mot17.pth.tar
+python3 tools/aic_get_detection_S001.py -f yolox/exps/example/mot/yolox_x_mix_det.py -c ../bytetrack_x_mot17.pth.tar /data/rbondili/AICITY2023
 
-conda deactivate
+# conda deactivate

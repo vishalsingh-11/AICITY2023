@@ -19,7 +19,9 @@ results = []
 
 dataset = 'test'
 synthetic = os.path.join(root_path,'final_n=15_dist200_pk_filter_margin_2')
-real = os.path.join(root_path,'0324_new_offset_fixed_reassignment_iteratively_250_65_200_70_150_75_interpolation')
+real = os.path.join(root_path,'final_n=15_dist200_pk_filter_margin_2')
+# real = os.path.join(root_path,'0324_new_offset_fixed_reassignment_iteratively_250_65_200_70_150_75_interpolation')
+
 
 seqs_syn = sorted([seq for seq in os.listdir(synthetic) if seq.endswith('.txt')])
 seqs_real = sorted([seq for seq in os.listdir(real) if seq.endswith('.txt')])

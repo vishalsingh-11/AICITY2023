@@ -1,8 +1,9 @@
 VideoCameraCorrection
-assets
+YOLOX_outputs
 build
 fast_reid
-loggg
+pretrained
+runs
 tools
 tracker
 yolov7

@@ -97,9 +97,11 @@ def get_people(scene, dataset, threshold):
     feature4 = np.load(os.path.join(root_path,'test_emb','S001_osnet_x1_0_market.npy'),allow_pickle=True)
     feature5 = np.load(os.path.join(root_path,'test_emb','S001_osnet_x1_0_msmt17.npy'),allow_pickle=True)
     embeddings = np.array([None]*len(feature1))
-
     for i in range(len(feature1)):
         embeddings[i] = np.concatenate((feature1[i],feature2[i],feature3[i],feature4[i],feature5[i]),axis=0)
+    # embeddings = np.array([None]*len(feature3))
+    # for i in range(len(feature3)):
+    #     embeddings[i] = feature3[i]
 
     '''
     nms
@@ -185,10 +187,11 @@ def get_anchor(scene, dataset, threshold, nms_thres):
     feature4 = np.load(os.path.join(root_path,'test_emb','S001_osnet_x1_0_market.npy'),allow_pickle=True)
     feature5 = np.load(os.path.join(root_path,'test_emb','S001_osnet_x1_0_msmt17.npy'),allow_pickle=True)
     embeddings = np.array([None]*len(feature1))
-
     for i in range(len(feature1)):
         embeddings[i] = np.concatenate((feature1[i],feature2[i],feature3[i],feature4[i],feature5[i]),axis=0)
-
+    # embeddings = np.array([None]*len(feature3))
+    # for i in range(len(feature3)):
+    #     embeddings[i] = feature3[i]
     '''
     nms
     '''
@@ -278,6 +281,7 @@ if __name__ == "__main__":
 
     os.makedirs(os.path.join(root_path,'hungarian_cluster_S001'),exist_ok=True)
 
+
     hungarian_thres = None
     
     dataset = 'test'
@@ -356,7 +360,7 @@ if __name__ == "__main__":
         cams = sorted([cam for cam in cams if not cam.endswith('png')])
         
         for c_idx,cam in enumerate(cams):
-    
+
             n = n_list[c_idx]
     
             logger.info('processing scene {} cam {}'.format(scene,cam))

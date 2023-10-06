@@ -12,11 +12,11 @@ DATA_METADATA = {
         "market": {
             2: [8, 9, 10, 11, 12, 13],
             4: [20, 21, 22, 23, 24],
-            6: [30, 31, 32, 33, 34, 35]
+            6: [30, 31, 32, 33, 34, 35],
+            7: [36, 37, 38, 39, 40]
         },
         "office": {
             10: [53, 54, 55, 56, 57, 58],
-            11: [59, 60, 61, 62, 63, 64]
         },
         "hospital": {
             11: [59, 60, 61, 62, 63, 64],
@@ -46,22 +46,38 @@ DATA_METADATA = {
         "warehouse": {
             20: [112, 113, 114, 115, 116, 117]
         }
+    },
+    "test":{
+         "market": {
+            5: [25, 26, 27, 28, 29]
+        },
     }
 }
 
-train_seq_id = []
-for scene_id in DATA_METADATA["train"].keys():
-    for seq_id in DATA_METADATA["train"][scene_id].keys():
-        train_seq_id.append((scene_id, seq_id))
-val_seq_id = []
-for scene_id in DATA_METADATA["validation"].keys():
-    for seq_id in DATA_METADATA["validation"][scene_id].keys():
-        val_seq_id.append((scene_id, seq_id))
+# train_seq_id = []
+# for scene_id in DATA_METADATA["train"].keys():
+#     for seq_id in DATA_METADATA["train"][scene_id].keys():
+#         train_seq_id.append((scene_id, seq_id))
+# val_seq_id = []
+# for scene_id in DATA_METADATA["validation"].keys():
+#     for seq_id in DATA_METADATA["validation"][scene_id].keys():
+#         val_seq_id.append((scene_id, seq_id))
 
-train_folder_list = [data_root + "train/" + "S{:03d}/".format(sid) for sid in train_seq_id]
-val_folder_list = [data_root + "validation/" + "S{:03d}/".format(sid) for sid in val_seq_id]
+test_seq_id = []
+for scene_id in DATA_METADATA["test"].keys():
+    for seq_id in DATA_METADATA["test"][scene_id].keys():
+        test_seq_id.append((scene_id, seq_id))
 
-for folder_path in train_folder_list + val_folder_list:
+# print(val_seq_id)
+# train_folder_list = [data_root + "train/"+"S{:03d}/".format(sid) for sid in train_seq_id]
+# val_folder_list = [data_root + "validation/" + "S{:03d}/".format(sid) for sid in val_seq_id]
+test_folder_list = [data_root + "test/"+"S{:03d}/".format(sid[1]) for sid in test_seq_id]
+# test_folder_list = [data_root + "test/" + "S{:03d}/".format(int(sid)) for sid in test_seq_id]
+
+
+
+# for folder_path in train_folder_list + val_folder_list:
+for folder_path in test_folder_list:
     camera_folder_list = glob.glob(folder_path + '*/')
     for camera_path in camera_folder_list:
         frame_folder_path = camera_path + 'frame/'

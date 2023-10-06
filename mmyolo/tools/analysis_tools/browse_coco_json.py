@@ -44,7 +44,6 @@ def show_coco_json(args):
         annotations = coco.loadAnns(annotation_ids)
 
         image = cv2.imread(image_path)
-        print(image_path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         plt.figure()
@@ -64,7 +63,7 @@ def show_coco_json(args):
         plt.close()
 
 
-def show_bbox_only(coco, anns, show_label_bbox=True, is_filling=False):
+def show_bbox_only(coco, anns, show_label_bbox=True, is_filling=True):
     """Show bounding box of annotations Only."""
     if len(anns) == 0:
         return

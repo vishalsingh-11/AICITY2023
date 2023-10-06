@@ -9,9 +9,11 @@ from mmyolo.registry import VISUALIZERS
 from mmyolo.utils import register_all_modules, switch_to_deploy
 from mmyolo.utils.labelme_utils import LabelmeFormat
 from mmyolo.utils.misc import show_data_classes
+import torchsummary
+import sys
 
 dataset = 'test'
-input = '/data/test'
+input = '../data/test/'
 
 testing_img_list = []
 
@@ -65,6 +67,7 @@ def main():
 
     # build the model from a config file and a checkpoint file
     model = init_detector(args.config, args.checkpoint, device=args.device)
+
     if args.deploy:
         switch_to_deploy(model)
 
@@ -74,13 +77,14 @@ def main():
     # init visualizer
     visualizer = VISUALIZERS.build(model.cfg.visualizer)
     visualizer.dataset_meta = model.dataset_meta
-
+    
+    # print(visualizer,visualizer.dataset_meta)
     # get file list
     # files, source_type = get_file_list(args.img)
 
     # get model class name
     dataset_classes = model.dataset_meta.get('classes')
-
+    # print(dataset_classes)
     # ready for labelme format if it is needed
     to_label_format = LabelmeFormat(classes=dataset_classes)
 
@@ -94,8 +98,12 @@ def main():
                 'Expected args.class_name to be one of the list, '
                 f'but got "{class_name}"')
 
+
+    # sys.exit()
+    
     # start detector inference
     scenes = sorted(os.listdir(input))
+    scenes = ['S005']
     for scene in scenes:
         if args.scene and args.scene != scene: continue  # only demo 1 scene
         print('processing scene {}'.format(scene))
@@ -103,7 +111,7 @@ def main():
         cams = [cam for cam in cams if not cam.endswith('png')]
         detection = []
         for cam in cams:
-            images = sorted(list_full_paths(os.path.join(input, scene, cam, 'img')))
+            images = sorted(list_full_paths(os.path.join(input, scene, cam, 'frame')))
             progress_bar = ProgressBar(len(images))
             for file in images:
                 result = inference_detector(model, file)
@@ -139,7 +147,7 @@ def main():
                         points = [cam, image_name, 1, pred_bbox[0], pred_bbox[1], pred_bbox[2], pred_bbox[3], score]
                         detection.append(points)
 
-        output_path = 'data/{}_det/{}.txt'.format(dataset, scene)
+        output_path = '../data/{}_det/{}.txt'.format(dataset, scene)
 
         with open(output_path, 'a') as f:
             for cam, img_name, cls, x1, y1, x2, y2, score in detection:

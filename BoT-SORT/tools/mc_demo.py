@@ -324,6 +324,7 @@ def main(exp, args):
             ckpt_file = osp.join(output_dir, "best_ckpt.pth.tar")
         else:
             ckpt_file = args.ckpt
+        print("checkpoint, dir",ckpt_file)
         logger.info("loading checkpoint")
         ckpt = torch.load(ckpt_file, map_location="cpu")
         # load the model state dict

@@ -20,19 +20,22 @@ def make_parser():
     #parser.add_argument('--reid_model_ckpt', help='ReID model path')
     parser.add_argument('--scene', default = None, help='scene')
     args = parser.parse_args()
+    print(args)
     return args
 
 
 if __name__ == "__main__":
+    args = make_parser()
+    # data_root = args.root_path
+    data_root = "/data/rbondili/AICITY2023"
 
-    args = make_parser().parse_args()
-    data_root = args.root_path
-
-    test_list = ['S003','S009','S014','S018','S021','S022']
+    # test_list = ['S003','S009','S014','S018','S021','S022']
+    test_list = ['S009']
 
     dataset = 'test'
 
-    data_root = args.root_path
+    # data_root = args.root_path
+    data_root = "/data/rbondili/AICITY2023"
 
     sys.path.append(data_root+'/deep-person-reid')
 
@@ -46,7 +49,7 @@ if __name__ == "__main__":
         T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
     
-    reid_model_ckpt = osp.join(data_root,'deep_person_reid','checkpoints','synthetic_reid_model_60_epoch.pth')
+    reid_model_ckpt = osp.join(data_root,'deep-person-reid','checkpoints','synthetic_reid_model_60_epoch.pth')
 
     extractor = FeatureExtractor(
         model_name='osnet_x1_0',
@@ -78,10 +81,12 @@ if __name__ == "__main__":
                 print('process {}/{}'.format(idx,len(dets)))
             
             if cur_frame != int(frame):
+                print("INNN IFFFFF")
                 cur_frame = int(frame)
-                img_path = os.path.join(img_dir,scene,cam,'frame',frame.zfill(5)+'.jpg')
-                img = Image.open(img_path)
-           
+                
+            img_path = os.path.join(img_dir,scene,cam,'frame',frame.zfill(5)+'.jpg')
+            print(img_path)
+            img = Image.open(img_path)
             img_crop = img.crop((x1,y1,x2,y2))
             img_crop = val_transforms(img_crop.convert('RGB')).unsqueeze(0)
             feature = extractor(img_crop).cpu().detach().numpy()[0]

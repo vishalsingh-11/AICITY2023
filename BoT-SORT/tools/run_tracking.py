@@ -1,5 +1,6 @@
 import os
 import argparse
+import sys
 
 def make_parser():
     parser = argparse.ArgumentParser("run tracking")
@@ -15,7 +16,7 @@ if __name__ == "__main__":
     os.system("python tools/aic_track.py {}".format(root_path))
 
     # clustering for synthetic data
-    os.system("python tools/aic_hungarian_cluster.py {}".format(root_path))
+    # os.system("python tools/aic_hungarian_cluster.py {}".format(root_path))
     
     # clustering for real data
     os.system("python tools/aic_hungarian_cluster_S001.py {}".format(root_path))

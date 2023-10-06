@@ -282,8 +282,9 @@ def main():
     #     "tracking_file/0324_without_interpolation_feet/S001_c007.txt"
     # ]
 
+
     tracks_list = {
-        _track_file.split('_')[-1][:-4]: load_tracking(_track_file, enable_feet=True) for _track_file in
+        _track_file.split('_')[-1][:-4]: load_tracking(_track_file, enable_feet=False) for _track_file in
         tracks_file_list
     }
 

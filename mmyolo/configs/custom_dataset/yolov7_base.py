@@ -1,8 +1,9 @@
 _base_ = '../yolov7/yolov7_l_syncbn_fast_8x16b-300e_coco.py'
 
 max_epochs = 100
-data_root = '../../data/'  # change to custom data root path
-load_from = 'https://download.openmmlab.com/mmyolo/v0/yolov7/yolov7_x_syncbn_fast_8x16b-300e_coco/yolov7_x_syncbn_fast_8x16b-300e_coco_20221124_215331-ef949a68.pth'
+data_root = '/data/rbondili/AICITY2023/'  # change to custom data root path
+# load_from = 'https://download.openmmlab.com/mmyolo/v0/yolov7/yolov7_x_syncbn_fast_8x16b-300e_coco/yolov7_x_syncbn_fast_8x16b-300e_coco_20221124_215331-ef949a68.pth'
+load_from = '/data/rbondili/AICITY2023/mmyolo/chekpoints/yolov7_x_syncbn_fast_8x16b-300e_coco_20221124_215331-ef949a68.pth'
 
 train_batch_size_per_gpu = 8
 train_num_workers = 16
@@ -56,7 +57,7 @@ train_dataloader = dict(
             type=_base_.dataset_type,
             data_root=data_root,
             metainfo=metainfo,
-            ann_file='annotations/train_all_val_all_sr_20_10_img_77154.json',
+            ann_file='data/annotations/train_all_val_all_sr_20_10_img_77154.json',
             data_prefix=dict(img=''),
             filter_cfg=dict(filter_empty_gt=False, min_size=32),
             pipeline=_base_.train_pipeline)))
@@ -65,12 +66,12 @@ val_dataloader = dict(
     dataset=dict(
         metainfo=metainfo,
         data_root=data_root,
-        ann_file='annotations/train_all_val_all_sr_600_0_img_2569.json',
+        ann_file='data/annotations/train_all_val_all_sr_600_0_img_2569.json',
         data_prefix=dict(img='')))
 
 test_dataloader = val_dataloader
 
-val_evaluator = dict(ann_file=data_root + 'annotations/train_all_val_all_sr_600_0_img_2569.json')
+val_evaluator = dict(ann_file=data_root + 'data/annotations/train_all_val_all_sr_600_0_img_2569.json')
 test_evaluator = val_evaluator
 
 optim_wrapper = dict(optimizer=dict(lr=base_lr))
