@@ -1,35 +1,16 @@
-# CVPRW2023: Enhancing Multi-Camera People Tracking with Anchor-Guided Clustering and Spatio-Temporal Consistency ID Re-Assignment
+# Multi-Camera People Tracking
 
-This is the official repositroy for 7th NVIDIA AI City Challenge (2023) Track 1: Multi-Camera People Tracking. [[Arxiv]](https://arxiv.org/abs/2304.09471)
+This is project is the implementation of the official repositroy for 7th NVIDIA AI City Challenge (2023) [Track 1: Multi-Camera People Tracking](https://github.com/ipl-uw/AIC23_Track1_UWIPL_ETRI) [[Arxiv]](https://arxiv.org/abs/2304.09471)
  
-## Ranking 
-
-<img src="ranking.jpg" width="650" />
-
 ## Overall Pipeline
 
 <img src="figure.jpg" width="650" />
 
-## Enviroment Requirements
+## Directory Structure
 
-The implementation of our work is built upon [BoT-SORT](https://github.com/NirAharon/BoT-SORT), [OpenMMLab](https://github.com/open-mmlab), and [torchreid](https://github.com/KaiyangZhou/deep-person-reid). We also adapt [Cal_PnP](https://github.com/zhengthomastang/Cal_PnP) for camera self-calibration.
-
-Four different enviroments are required for the reproduce process. Please install these three enviroments according to the following repos:
-1. [Installation for mmyolo*](https://github.com/open-mmlab/mmyolo#%EF%B8%8F-installation-)
-2. [Installation for mmpose](https://mmpose.readthedocs.io/en/latest/installation.html)
-3. [Installation for torchreid*](https://github.com/KaiyangZhou/deep-person-reid#installation)
-4. [Installation for BoT-SORT](https://github.com/NirAharon/BoT-SORT#installation)
-
-\* optional for fast reproduce
-
-## Training 
-
-#### Train Synthetic Detector (skip for fast reproduce)
-0. Prepare MTMC Dataset and annotations
-Download `AIC23_Track1_MTMC_Tracking.zip` from [AICity organizer](https://www.aicitychallenge.org/2023-data-and-evaluation/) and unzip under the root directory of this repo and run:
-```
-bash scripts/0_prepare_mtmc_data.sh
-```
+1. Make sure to use ```uncc-kubeflow-base``` docker image 
+2. The complete project is available at ``` path ```
+3. Download the dataset from https://www.aicitychallenge.org/, and place the test data in `./data/`
 
 You should see the `data` folder organized as follows: 
 ```
@@ -50,32 +31,63 @@ data
 │   .   .
 │   .   .
 ├── validation
-└── train
+├── test
+│   ├── S002
+│   │   ├── c008
+│   │   │   ├── video.mp4
 ```
 
-1. Train yolov7 models on synthetic data
+
+## Enviroment Requirements
+
+ ```
+    git clone https://github.com/ipl-uw/AIC23_Track1_UWIPL_ETRI.git
+    cd AIC23_Track1_UWIPL_ETRI
+ ```
+The implementation of our work is built upon [BoT-SORT](https://github.com/NirAharon/BoT-SORT), [OpenMMLab](https://github.com/open-mmlab), and [torchreid](https://github.com/KaiyangZhou/deep-person-reid). We also adapt [Cal_PnP](https://github.com/zhengthomastang/Cal_PnP) for camera self-calibration.
+
+Four different enviroments are required for the reproduce process. Please install these three enviroments according to the following repos:
+1. [Installation for mmyolo*](https://github.com/open-mmlab/mmyolo#%EF%B8%8F-installation-)
+2. [Installation for mmpose*](https://mmpose.readthedocs.io/en/latest/installation.html)
+3. [Installation for torchreid*](https://github.com/KaiyangZhou/deep-person-reid#installation)
+4. [Installation for BoT-SORT](https://github.com/NirAharon/BoT-SORT#installation)
+
+\* optional for fast reproduce
+
+
+### Bot-SORT Installtion
 ```
-bash scripts/1_train_detector.sh
+#Bot-SORT
+conda create -n botsort_env python=3.7
+conda activate botsort_env
+
+# pytorch
+pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113 
+
+cd BoT-SORT
+pip3 install -r requirements.txt
+python3 setup.py develop
+pip3 install cython; pip3 install 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
+
+# Cython-bbox
+pip3 install cython_bbox
+
+# faiss cpu / gpu
+pip3 install faiss-cpu
+pip3 install faiss-gpu
 ```
 
-\* Note that the configs we provided are the ones we used in our submission. They may not be optimized for your GPU, please adjust the batchsize accordingly.
-
-#### Train Synthetic ReID Model (skip for fast reproduce)
-0. Prepare ReID Dataset
+#### mmcv Installation for mmyolo, mmpose
+<!--
 ```
-mkdir deep-person-reid/reid-data
+### mmyolo Installtion
+Make sure to review Issues section before mmyolo installation.
+
+# train-detector
+pip install future tensorboard
+pip install setuptools==59.5.0
 ```
-Download our [sampled dataset](https://drive.google.com/file/d/1M1I35sjOPaTWYFO4WgydqNZ9896cqQn9/view) and unzip it under [deep-person-reid/reid-data](deep-person-reid/reid-data).
-
-\* Note that the file name DukeMTMC is just for training convenience, the DukeMTMC dataset is not used in our training process.
-
-1. Train reid model on synthetic data
-```
-bash 2_train_reid.sh
-```
-
-[//]: # (After the training is finished, move the model to `deep-person-reid/checkpoints` and modify the model name to `synthetic_reid_model_60_epoch.pth`.)
-
+-->
 ## Inferencing
 
 #### Get Detection (skip for fast reproduce)
@@ -112,7 +124,7 @@ Download the [embedding npy files](https://drive.google.com/drive/folders/1qbwu3
 bash scripts/5_inference_emb.sh
 ```
 
-### Run Tracking
+#### Run Tracking
 
 The root_path for the following command should set to the repo's loaction
 
@@ -121,29 +133,18 @@ The root_path for the following command should set to the repo's loaction
 cd BoT-SORT
 ```
 
-2. Run tracking
+2. Run tracking - (Make sure to have Sufficient RAM(atleast 35 gigs) before executing run_tracking.py)
 ```
 conda activate botsort_env
 python tools/run_tracking.py <root_path>
 ```
 
-3. Generate foot keypoint (optional)
-```
-conda activate mmpose
-cd ../mmpose
-python demo/top_down_video_demo_with_track_file.py <tracking_file.txt> \ 
-       configs/body/2d_kpt_sview_rgb_img/topdown_heatmap/coco/hrnet_w48_coco_256x192.py \
-       https://download.openmmlab.com/mmpose/top_down/hrnet/hrnet_w48_coco_256x192-b9e0b3ab_20200708.pth \
-       --video-path <video_file.mp4> \
-       --out-file <out_keypoint.json>
-python tools/convert.py
-```
 
 4. Conduct spatio-temporal consistency reassignment 
 ```
 python STCRA/run_stcra.py <input_tracking_file_folder> <output_tracking_file_folder>
 ```
-
+<!--
 5. Generate final submission
 ```
 cd ../BoT-SORT
@@ -151,3 +152,13 @@ python tools/aic_interpolation.py <root_path>
 python tools/boundaryrect_removal.py <root_path>
 python tools/generate_submission.py <root_path>
 ```
+-->
+
+## Issues and Resolutions 
+
+**1. Memory Issue with run_tracking.py** - Make sure to have sufficient memory  \
+**2. Openmmlab Installations** - mmcv, mmpose, mmdet, mmyolo, mmengine - Make sure to use ```uncc-kubeflow-base``` image to avoid issues with mmcv. \
+**3. mmcv,mmpose,mmdet,mmyolo version issues**
+ - Make sure to follow above mentioned instructions for mmcv installation.
+ - Clone the official repositories and replace the ones in the current versions(./mmpose, ./mmyolo)
+ - Make sure to add back relevant missing files from the current repository into the latest cloned repositories.
